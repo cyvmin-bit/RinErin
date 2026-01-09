@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RinErin Cookies</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+  <div class="logo">RinErin Cookies</div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+
+  <div id="welcomeUser" class="welcome-center hide">
+  Welcome, <span id="welcomeName"></span>!
+</div>
+
+  <nav class="nav-menu" id="mainMenu">
+
+  <!-- USER -->
+  <div class="button-container-1 user-only">
+    <span class="mas">HOME</span>
+    <button onclick="show('homepage')">HOME</button>
+  </div>
+
+  <div class="button-container-1 user-only">
+    <span class="mas">PRODUCTS</span>
+    <button onclick="show('productsSection')">PRODUCTS</button>
+  </div>
+
+  <div class="button-container-1 user-only">
+    <span class="mas">
+      CART (<span id="cartCount">0</span>)
+    </span>
+    <button onclick="show('cart')">CART (<span id="cartCount">0</span>)</button>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="button-container-1 admin-only hide">
+    <span class="mas">HOME</span>
+    <button onclick="show('homepage')">HOME</button>
+  </div>
+
+  <div class="button-container-1 admin-only hide">
+    <span class="mas">PRODUCTS</span>
+    <button onclick="show('adminProducts')">PRODUCTS</button>
+  </div>
+
+  <div class="button-container-1 admin-only hide">
+    <span class="mas">ORDERS</span>
+    <button onclick="show('adminOrders')">ORDERS</button>
+  </div>
+
+  <!-- AUTH -->
+  <div class="button-container-1" id="loginLink">
+    <span class="mas">LOGIN</span>
+    <button onclick="show('login')">LOGIN</button>
+  </div>
+
+  <div class="button-container-1 hide" id="logoutLink">
+    <span class="mas">LOGOUT</span>
+    <button onclick="logout()">LOGOUT</button>
+  </div>
+
+</nav>
+
+</header>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div id="productModal" class="modal hide">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✖</button>
+
+    <img id="mImg">
+    <h2 id="mName"></h2>
+    <p id="mDesc"></p>
+
+    <div class="price-row">
+  <h3 id="mPrice"></h3>
+
+  <div class="cart-btn"
+    id="modalCartBtn"
+    data-tooltip="">
+
+    <div class="cart-btn-wrapper">
+      <div class="cart-text">Add To Cart</div>
+
+      <div class="cart-icon">
+        <svg xmlns="http://www.w3.org/2000/svg"
+          width="22" height="22" fill="currentColor"
+          viewBox="0 0 16 16">
+          <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5z"/>
+          <path d="M5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm6 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </div>
+</div>
+
+<!-- EDIT PRODUCT MODAL -->
+<div id="editModal" class="modal hide">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeEditModal()">✖</button>
+
+    <h2>Edit Product</h2>
+
+    <input id="editName" placeholder="Product Name">
+    <input id="editPrice" type="number" placeholder="Price">
+    <input id="editImg" placeholder="Image URL" oninput="updatePreview()">
+
+    <img id="editPreview"
+     style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin:10px 0;display:none">
+
+    <input id="editDesc" placeholder="Description">
+
+    <button class="btn" onclick="saveEdit()">Save Changes</button>
+
+  </div>
+</div>
+
+<!-- ADD PRODUCT MODAL -->
+<div id="addModal" class="modal hide">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAddModal()">✖</button>
+
+    <h2>Add Product</h2>
+
+    <input id="addName" placeholder="Product Name">
+    <input id="addPrice" type="number" placeholder="Price">
+    <input id="addImg" placeholder="Image URL" oninput="updateAddPreview()">
+
+    <img id="addPreview"
+      style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin:10px 0;display:none">
+
+    <input id="addDesc" placeholder="Description">
+
+    <button class="btn" onclick="saveAddProduct()">Add Product</button>
+  </div>
+</div>
+
+
+
+<main>
+
+<!-- LOGIN -->
+<section id="login" class="center hide">
+  <h2>Login</h2>
+  <input id="loginEmail" type="email" placeholder="Email">
+  <input id="loginPassword" type="password" placeholder="Password">
+  <button class="btn" id="loginBtn" onclick="doLogin()">
+  <span id="loginBtnText">Login</span>
+</button>
+  <p>Don’t have an account?
+    <a href="#" onclick="show('register')">Register</a>
+  </p>
+  <p id="loginMsg"></p>
+</section>
+
+<!-- REGISTER -->
+<section id="register" class="center hide">
+  <h2>Register</h2>
+  <input id="regUsername" placeholder="Username">
+  <input id="regEmail" type="email" placeholder="Email">
+  <input id="regPassword" type="password" placeholder="Password (min 6)">
+  <button class="btn" id="registerBtn" onclick="doRegister()">
+  <span id="registerBtnText">Register</span>
+</button>
+  <p>Already have an account?
+    <a href="#" onclick="show('login')">Login</a>
+  </p>
+  <p id="regMsg"></p>
+</section>
+
+
+<!-- HERO -->
+<section id="homepage">
+<section class="hero-showcase">
+
+  <div class="hero-wrap">
+
+    <!-- LEFT : Text + Logo -->
+    <div class="hero-text">
+      <div class="hero-logo-wrap">
+  <img src="logo.png" class="hero-logo" alt="RinErin Cookies Logo">
+</div>
+
+      <h1 class="hero-title">
+        Homemade Cookies & Treats. Freshly Baked!
+      </h1>
+
+      <p class="hero-desc">
+        Order from our selection of signature cookie packs. I
+        perfect for gifts, events, or a sweet treat at home.
+      </p>
+
+<div class="cta user-only">
+  <button class="btn floating-btn" onclick="goToProducts()">
+    Shop Now !
+  </button>
+</div>
+
+    </div>
+
+    <!-- RIGHT : Seller Image -->
+    <div class="hero-image">
+      <img src="mom.jpeg" alt="Seller">
+    </div>
+
+  </div>
+</section>
+
+<!-- BEST SELLERS -->
+  <section class="hero-showcase">
+    <h2 class="hero-title">Our Best Sellers</h2>
+
+    <div class="card-scroll" id="bestSellerList">
+      <div class="show-card" onclick="openFromBestSeller('Biskut Mazola')">
+        <img src="Biskut Mazola.jpg">
+      </div>
+      <div class="show-card" onclick="openFromBestSeller('Bright Eyed Susan')">
+        <img src="Bright Eyed Susan.jpg">
+      </div>
+      <div class="show-card" onclick="openFromBestSeller('Chocolate Chips Cookies')">
+        <img src="Chocolate Chips.jpg">
+      </div>
+      <div class="show-card" onclick="openFromBestSeller('Cornflakes Cookies')">
+        <img src="Cornflakes Cookies.jpg">
+      </div>
+      <div class="show-card" onclick="openFromBestSeller('London Almond')">
+        <img src="London Almond.jpg">
+      </div>
+      <div class="show-card" onclick="openFromBestSeller('Peanut Butter Cookies')">
+        <img src="peanut butter.jpeg">
+      </div>
+      <div class="show-card" onclick="openFromBestSeller('Red Velvet Cookies')">
+        <img src="Red Velvet.jpg">
+      </div>
+      <div class="show-card" onclick="openFromBestSeller('Samperit')">
+        <img src="samperit.jpeg">
+      </div>
+      <div class="show-card" onclick="openFromBestSeller('Suji Badam')">
+        <img src="Suji Badam.jpg">
+      </div>
+      <div class="show-card" onclick="openFromBestSeller('Tart Nenas')">
+        <img src="Tart Nenas.jpg">
+      </div>
+
+    </div>
+  </section>
+
+</section>
+
+<!-- PRODUCTS (SEPARATE PAGE) -->
+<section id="productsSection" class="hide">
+  <h2>Our Cookies</h2>
+  <div class="grid" id="products"></div>
+</section>
+
+<!-- ADMIN PRODUCTS -->
+<section id="adminProducts" class="hide">
+  <h2>Manage Products</h2>
+  <div class="grid" id="adminProductGrid"></div>
+
+  <!-- Floating Add Product Button -->
+  <div class="menu-tooltip fab-container">
+  <input type="checkbox" id="toggle" />
+  <label for="toggle" class="toggle" onclick="openAddModal()">➕</label>
+</div>
+</section>
+
+<!-- ADMIN ORDERS PAGE -->
+ <!-- NEW ADDED --> 
+<section id="adminOrders" class="hide">
+  <h2 class="admin-title">Customer Orders</h2>
+
+  <div class="orders-wrapper">
+    <div id="adminOrdersList" class="orders-grid"></div>
+  </div>
+</section>
+
+
+
+<!-- NEW ADDED --> 
+<!-- CART --> 
+<section id="cart" class="hide cart-page">
+  <h2>Your Cart</h2>
+
+  <p id="emptyCartMsg" class="hide">Your cart is empty 🛒</p>
+
+  <button id="removeAllBtn" class="remove-all-btn hide" onclick="clearCart()">
+    🗑 Remove All
+  </button>
+
+  <div id="cartItems" class="cart-list"></div>
+
+  <button id="checkoutBtn" class="checkout-btn hide" onclick="show('checkout')">
+    Proceed to Checkout
+  </button>
+</section>
+
+ 
+<!-- CHECKOUT -->
+<section id="checkout" class="hide">
+<div class="checkout-form">
+  <h2>Checkout</h2>
+
+    <label>Full Name</label>
+    <input id="custName" placeholder="Your full name">
+
+    <label>Email</label>
+    <input id="custEmail" type="email" placeholder="example@email.com">
+
+    <label>Phone Number</label>
+    <input id="custPhone" placeholder="01X-XXXXXXX">
+
+    <label>Delivery Address</label>
+    <textarea id="custAddress" rows="3" placeholder="Your full address"></textarea>
+
+    <h3>Payment Method</h3>
+
+    <div class="payment-options">
+      <label>
+        <input type="radio" name="payment" value="Cash on Delivery">
+        Cash on Delivery
+      </label>
+
+      <label>
+        <input type="radio" name="payment" value="Online Banking">
+        Online Banking
+      </label>
+
+      <label>
+        <input type="radio" name="payment" value="QR Pay">
+        QR Pay
+      </label>
+    </div>
+
+    <button class="btn checkout-btn" onclick="submitCheckout()">
+      Pay Now
+    </button>
+
+    <p id="payMsg"></p>
+  </div>
+</section>
+
+
+<!-- RECEIPT -->
+<section id="receipt" class="hide">
+  <div class="confirmation-page">
+
+    <h2>Order Confirmed 🎉</h2>
+    <div class="receipt-sub">Thank you for your purchase</div>
+
+    <div class="receipt-row">
+      <strong>Order ID</strong>
+      <span id="rOrderId"></span>
+    </div>
+
+    <div class="receipt-row">
+      <strong>Name</strong>
+      <span id="rName"></span>
+    </div>
+
+    <div class="receipt-row">
+      <strong>Email</strong>
+      <span id="rEmail"></span>
+    </div>
+
+    <div class="receipt-row">
+      <strong>Phone</strong>
+      <span id="rPhone"></span>
+    </div>
+
+    <div class="receipt-row">
+      <strong>Address</strong>
+      <span id="rAddress"></span>
+    </div>
+
+    <div class="receipt-row">
+      <strong>Payment</strong>
+      <span id="rPayment"></span>
+    </div>
+
+    <div class="receipt-divider"></div>
+
+    <div id="rItems"></div>
+
+    <div class="receipt-divider"></div>
+
+    <div class="receipt-total">
+      <span>Total</span>
+      <span>RM <span id="rTotal"></span></span>
+    </div>
+
+    <button class="btn" onclick="show('homepage')">
+      Back to Home
+    </button>
+
+  </div>
+</section>
+
+
+
+<!-- CONFIRM -->
+<section id="confirm" class="hide">
+  <h2>Order Confirmed</h2>
+  <p>Thank you for your purchase.</p>
+</section>
+
+<!-- ADMIN -->
+<section id="admin" class="hide">
+  <h2>Admin Panel</h2>
+  <input id="pName" placeholder="Product Name">
+  <input id="pPrice" type="number" placeholder="Price">
+  <input id="pImg" placeholder="Image URL">
+  <input id="pDesc" placeholder="Description">
+  <button class="btn" onclick="addProduct()">Add Product</button>
+
+  <h3>Products</h3>
+  <table><tbody id="adminProducts"></tbody></table>
+
+  <h3>Orders</h3>
+  <table><tbody id="adminOrders"></tbody></table>
+</section>
+
+</main>
+
+ <div class="full-footer">
+  <div class="footer-inner">
+
+    <div class="footer-col addres">
+      <img src="logo.png" alt="logo">
+      <h6>RinErin Cookies Shop</h6>
+      <p>
+        Lot 22 Lazenda Villa 7 Jalan Tun Mustapha<br>
+        WP Labuan 87000
+      </p>
+      <p>Phone 016-222-0482</p>
+    </div>
+
+    <div class="footer-col about">
+      <h4>About Us</h4>
+      <p>
+        "Simplicity in every bite." RinErin Cookies started with a simple passion for the perfect homemade bake. We stick to traditional methods to preserve the true flavor and quality of our treats. Always fresh, always crunchy, and guaranteed to bring a smile to your face.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="bottom-bar">
+    RinErin Cookies • © 2026 • All rights reserved
+  </div>
+</div>
+
+<!-- ✅ LOAD JS MODULE -->
+<script type="module" src="app.js"></script>
+
+</body>
+</html>
