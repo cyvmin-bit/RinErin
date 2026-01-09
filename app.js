@@ -1,5 +1,3 @@
-
-
 let allProducts = [];
 let isAdminUser = false;
 
@@ -101,7 +99,7 @@ window.doLogin = async () => {
   const email = loginEmail.value.trim();
   const password = loginPassword.value.trim();
 
-  // 🔒 BASIC VALIDATION 
+  // 🔒 BASIC VALIDATION (NO STRUCTURE CHANGE)
   if (!email || !password) {
     loginMsg.textContent = "Please fill in email and password.";
     return;
@@ -326,6 +324,7 @@ onAuthStateChanged(auth, async (user) => {
     cartCount.textContent = "0";
   }
 });
+
 //NEW ADDED
 async function loadAdminOrders() {
   const adminOrdersList = document.getElementById("adminOrdersList");
@@ -1081,7 +1080,4 @@ This is your receipt. Please keep it for your records.
   }
 };
 
-
 show("homepage");
-
-
