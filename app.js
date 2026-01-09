@@ -27,44 +27,8 @@ import {
   serverTimestamp        // ✅ ADD THIS
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// ================= DOM ELEMENTS =================
-const products = document.getElementById("products");
-const cartItems = document.getElementById("cartItems");
-const cartCount = document.getElementById("cartCount");
-const emptyCartMsg = document.getElementById("emptyCartMsg");
-const checkoutBtn = document.getElementById("checkoutBtn");
-const removeAllBtn = document.getElementById("removeAllBtn");
+ 
 
-const loginEmail = document.getElementById("loginEmail");
-const loginPassword = document.getElementById("loginPassword");
-const loginBtn = document.getElementById("loginBtn");
-const loginBtnText = document.getElementById("loginBtnText");
-const loginMsg = document.getElementById("loginMsg");
-
-const regUsername = document.getElementById("regUsername");
-const regEmail = document.getElementById("regEmail");
-const regPassword = document.getElementById("regPassword");
-const registerBtn = document.getElementById("registerBtn");
-const registerBtnText = document.getElementById("registerBtnText");
-const regMsg = document.getElementById("regMsg");
-
-const welcomeUser = document.getElementById("welcomeUser");
-const welcomeName = document.getElementById("welcomeName");
-const loginLink = document.getElementById("loginLink");
-const logoutLink = document.getElementById("logoutLink");
-
-const productModal = document.getElementById("productModal");
-const modalCartBtn = document.getElementById("modalCartBtn");
-const mImg = document.getElementById("mImg");
-const mName = document.getElementById("mName");
-const mDesc = document.getElementById("mDesc");
-const mPrice = document.getElementById("mPrice");
-
-const bestSellerList = document.getElementById("bestSellerList");
-
-// ===============================
-// FIREBASE CONFIG
-// ===============================
 const firebaseConfig = {
   apiKey: "AIzaSyAncQ2x8c4YdCkLLJHSalcmO_Hzxx54UmA",
   authDomain: "rinerin-cookies.firebaseapp.com",
@@ -130,16 +94,14 @@ window.show = (id) => {
   if (id === "cart") loadCart();
 };
 
-// ===============================
-// AUTH
-// ===============================
+
 window.doLogin = async () => {
   loginMsg.textContent = "";
 
   const email = loginEmail.value.trim();
   const password = loginPassword.value.trim();
 
-  // BASIC VALIDATION
+  // 🔒 BASIC VALIDATION 
   if (!email || !password) {
     loginMsg.textContent = "Please fill in email and password.";
     return;
@@ -164,14 +126,14 @@ window.doLogin = async () => {
     show("homepage");
 
   } catch (e) {
-    //  FRIENDLY ERROR MESSAGES
+    // 🔥 FRIENDLY ERROR MESSAGES
     window.doLogin = async () => {
   loginMsg.textContent = "";
 
   const email = loginEmail.value.trim();
   const password = loginPassword.value.trim();
 
-  //🔒 BASIC VALIDATION (NO STRUCTURE CHANGE)
+  // 🔒 BASIC VALIDATION (NO STRUCTURE CHANGE)
   if (!email || !password) {
     loginMsg.textContent = "Please fill in email and password.";
     return;
@@ -324,9 +286,7 @@ window.logout = async () => {
   }
 };
 
-// ===============================
-// AUTH STATE
-// ===============================
+
 onAuthStateChanged(auth, async (user) => {
   const isAdmin = user && user.email === ADMIN_EMAIL;
   isAdminUser = isAdmin; // 🔥 SAVE ADMIN STATE
@@ -366,11 +326,7 @@ onAuthStateChanged(auth, async (user) => {
     cartCount.textContent = "0";
   }
 });
-
-
-// ===============================
-// ADMIN
-// ===============================
+//NEW ADDED
 async function loadAdminOrders() {
   const adminOrdersList = document.getElementById("adminOrdersList");
   adminOrdersList.innerHTML = "";
@@ -542,10 +498,6 @@ const loadBestSellers = async () => {
   });
 };
 
-
-// ===============================
-// CART
-// ===============================
 window.addToCartAndGo = async (index) => {
   const p = allProducts[index];
 
@@ -1020,6 +972,5 @@ window.toggleMenu = () => {
 };
 
 
-window.addEventListener("DOMContentLoaded", () => {
-  show("homepage");
-});
+show("homepage");
+
