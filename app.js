@@ -971,6 +971,117 @@ window.toggleMenu = () => {
     .classList.toggle("active");
 };
 
+// ========== PRINT & DOWNLOAD FUNCTIONS ==========
+
+window.printReceipt = () => {
+  window.print();
+};
+
+window.downloadReceiptPDF = () => {
+  const orderId = document.getElementById("rOrderId").textContent;
+  const name = document.getElementById("rName").textContent;
+  const email = document.getElementById("rEmail").textContent;
+  const phone = document.getElementById("rPhone").textContent;
+  const address = document.getElementById("rAddress").textContent;
+  const payment = document.getElementById("rPayment").textContent;
+  const items = document.getElementById("rItems").textContent;
+  const total = document.getElementById("rTotal").textContent;
+
+  // Create a temporary div to hold the receipt content
+  const receiptContent = document.createElement("div");
+  receiptContent.style.padding = "20px";
+  receiptContent.style.fontFamily = "Arial, sans-serif";
+  receiptContent.innerHTML = `
+    <h2 style="text-align: center; color: #8b5a2b; margin-bottom: 20px;">Order Confirmed 🎉</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 20px;">Thank you for your purchase</p>
+    
+    <div style="margin-bottom: 20px;">
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 8px 0;"><strong>Order ID</strong></td>
+          <td style="padding: 8px 0; text-align: right;">${orderId}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>Name</strong></td>
+          <td style="padding: 8px 0; text-align: right;">${name}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>Email</strong></td>
+          <td style="padding: 8px 0; text-align: right;">${email}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>Phone</strong></td>
+          <td style="padding: 8px 0; text-align: right;">${phone}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>Address</strong></td>
+          <td style="padding: 8px 0; text-align: right;">${address}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>Payment</strong></td>
+          <td style="padding: 8px 0; text-align: right;">${payment}</td>
+        </tr>
+      </table>
+    </div>
+
+    <hr style="border: none; border-top: 1px dashed #ddd; margin: 20px 0;">
+
+    <div style="margin: 20px 0;">
+      ${items}
+    </div>
+
+    <hr style="border: none; border-top: 1px dashed #ddd; margin: 20px 0;">
+
+    <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; color: #8b5a2b; margin-top: 20px;">
+      <span>Total</span>
+      <span>RM ${total}</span>
+    </div>
+
+    <p style="text-align: center; margin-top: 30px; font-size: 12px; color: #999;">
+      This is your receipt. Please keep it for your records.
+    </p>
+  `;
+
+  // Use html2canvas and jsPDF if available, otherwise use a simple print approach
+  if (typeof html2pdf !== 'undefined') {
+    html2pdf().setPaper('a4').setMargin(10).fromElement(receiptContent).save(`Receipt_${orderId}.pdf`);
+  } else {
+    // Fallback: Create a simple text-based download
+    const txtContent = `
+RIN ERIN COOKIES - ORDER RECEIPT
+================================
+
+Order Confirmed 🎉
+Thank you for your purchase
+
+ORDER ID:  ${orderId}
+NAME:      ${name}
+EMAIL:     ${email}
+PHONE:     ${phone}
+ADDRESS:   ${address}
+PAYMENT:   ${payment}
+
+================================
+ITEMS:
+${items}
+
+================================
+TOTAL: RM ${total}
+
+This is your receipt. Please keep it for your records.
+    `;
+
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(txtContent));
+    element.setAttribute('download', `Receipt_${orderId}.txt`);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+};
+
 
 show("homepage");
+
 
