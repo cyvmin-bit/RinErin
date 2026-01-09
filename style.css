@@ -1164,6 +1164,55 @@ background: radial-gradient(
   color: #fff;
 }
 
+/* Print button styling */
+.confirmation-page .btn-print {
+  background: #d4a574;
+  margin-bottom: 12px;
+}
+
+.confirmation-page .btn-print:hover {
+  background: #c99455;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Print styles */
+@media print {
+  body::before {
+    display: none;
+  }
+
+  header,
+  .nav-menu,
+  .hamburger,
+  .btn-print {
+    display: none !important;
+  }
+
+  #receipt {
+    all: revert;
+    display: flex !important;
+    padding: 0 !important;
+  }
+
+  .confirmation-page {
+    max-width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    background: #ffffff;
+  }
+
+  .confirmation-page .btn {
+    display: none;
+  }
+
+  main {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}
+
 /* Mobile */
 @media (max-width: 768px) {
   .confirmation-page {
